@@ -37,12 +37,12 @@ struct SDRemoteImageView<Placeholder: View>: View {
         self.customContent = nil
     }
 
-    init<I: View, P: View>(
+    init<I: View>(
         url: URL?,
         options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages],
         @ViewBuilder content: @escaping (Image) -> I,
-        @ViewBuilder placeholder: () -> P
-    ) where Placeholder == P {
+        @ViewBuilder placeholder: () -> Placeholder
+    ) {
         self.url = url
         self.contentMode = .fit
         self.options = options
@@ -79,3 +79,4 @@ extension SDRemoteImageView where Placeholder == Color {
         }
     }
 }
+

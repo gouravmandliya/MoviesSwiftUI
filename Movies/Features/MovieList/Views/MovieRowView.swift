@@ -12,7 +12,7 @@ struct MovieRowView: View {
     
     var body: some View {
         HStack(alignment: .top, spacing: 12) {
-            RemoteImageView(url: movie.posterURL) { image in
+            SDRemoteImageView(url: movie.posterURL) { image in
                 image
                     .resizable()
                     .aspectRatio(contentMode: .fill)

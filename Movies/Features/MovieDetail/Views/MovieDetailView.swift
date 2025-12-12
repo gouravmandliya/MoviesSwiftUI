@@ -41,7 +41,7 @@ struct MovieDetailView: View {
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
                 if let backdropURL = detail.backdropURL {
-                    RemoteImageView(url: backdropURL, contentMode: .fill) {
+                    SDRemoteImageView(url: backdropURL, contentMode: .fill) {
                         Color.gray.opacity(0.3)
                             .frame(maxWidth: .infinity, minHeight: 250, maxHeight: 400)
                             .clipped()

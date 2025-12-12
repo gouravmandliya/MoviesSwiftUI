@@ -22,7 +22,7 @@ struct ErrorView: View {
                 .foregroundColor(.secondary)
             
             Button("Retry", action: retryAction)
-                .buttonStyle(.borderedProminent)
+                .buttonStyle(.glassProminent)
         }
         .padding()
     }

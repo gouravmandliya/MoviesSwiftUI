@@ -37,6 +37,15 @@ final class NetworkManager: NetworkManaging {
                 throw NetworkError.serverError(statusCode: httpResponse.statusCode)
             }
             
+            #if DEBUG
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String : Any]
+                
+                print(json)
+            } catch {
+                print("errorMsg")
+            }
+            #endif
             do {
                 return try decoder.decode(T.self, from: data)
             } catch {
