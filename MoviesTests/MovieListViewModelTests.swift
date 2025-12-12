@@ -10,37 +10,37 @@ import XCTest
 
 @MainActor
 final class MovieListViewModelTests: XCTestCase {
-    var sut: MovieListViewModel!
-    var mockRepository: MockMovieRepository!
+    var movieListViewModel: MovieListViewModel!
+    var mockMovieRepository: MockMovieRepository!
     
     override func setUp() {
         super.setUp()
-        mockRepository = MockMovieRepository()
-        sut = MovieListViewModel(repository: mockRepository)
+        mockMovieRepository = MockMovieRepository()
+        movieListViewModel = MovieListViewModel(repository: mockMovieRepository)
     }
     
     override func tearDown() {
-        sut = nil
-        mockRepository = nil
+        movieListViewModel = nil
+        mockMovieRepository = nil
         super.tearDown()
     }
     
     // MARK: - Initial State Tests
     
     func test_initialState_hasEmptyMovies() {
-        XCTAssertTrue(sut.movies.isEmpty)
+        XCTAssertTrue(movieListViewModel.movies.isEmpty)
     }
     
     func test_initialState_isNotLoading() {
-        XCTAssertFalse(sut.isLoading)
+        XCTAssertFalse(movieListViewModel.isLoading)
     }
     
     func test_initialState_hasNoError() {
-        XCTAssertNil(sut.error)
+        XCTAssertNil(movieListViewModel.error)
     }
     
     func test_initialState_isNotShowingError() {
-        XCTAssertFalse(sut.isShowingError)
+        XCTAssertFalse(movieListViewModel.isShowingError)
     }
     
     // MARK: - Load Movies Success Tests
@@ -48,131 +48,131 @@ final class MovieListViewModelTests: XCTestCase {
     func test_loadMovies_success_updatesMovies() async {
         // Given
         let expectedMovies = Movie.mockArray(count: 3)
-        mockRepository.moviesResult = .success(expectedMovies)
+        mockMovieRepository.moviesResult = .success(expectedMovies)
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertEqual(sut.movies.count, 3)
-        XCTAssertEqual(sut.movies.first?.title, "Movie 1")
+        XCTAssertEqual(movieListViewModel.movies.count, 3)
+        XCTAssertEqual(movieListViewModel.movies.first?.title, "Movie 1")
     }
     
     func test_loadMovies_success_setsLoadingToFalse() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertFalse(sut.isLoading)
+        XCTAssertFalse(movieListViewModel.isLoading)
     }
     
     func test_loadMovies_success_clearsError() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
-        sut.error = .noData
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
+        movieListViewModel.error = .noData
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertNil(sut.error)
+        XCTAssertNil(movieListViewModel.error)
     }
     
     func test_loadMovies_success_callsRepositoryWithCorrectPage() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertEqual(mockRepository.lastRequestedPage, 1)
-        XCTAssertEqual(mockRepository.fetchMoviesCallCount, 1)
+        XCTAssertEqual(mockMovieRepository.lastRequestedPage, 1)
+        XCTAssertEqual(mockMovieRepository.fetchMoviesCallCount, 1)
     }
     
     func test_loadMovies_multipleCalls_incrementsPage() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When
-        await sut.loadMovies()
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertEqual(mockRepository.lastRequestedPage, 2)
+        XCTAssertEqual(mockMovieRepository.lastRequestedPage, 2)
     }
     
     func test_loadMovies_multipleCalls_appendsMovies() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray(count: 2))
+        mockMovieRepository.moviesResult = .success(Movie.mockArray(count: 2))
         
         // When
-        await sut.loadMovies()
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertEqual(sut.movies.count, 4)
+        XCTAssertEqual(movieListViewModel.movies.count, 4)
     }
     
     // MARK: - Load Movies Failure Tests
     
     func test_loadMovies_failure_setsError() async {
         // Given
-        mockRepository.moviesResult = .failure(.noData)
+        mockMovieRepository.moviesResult = .failure(.noData)
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertNotNil(sut.error)
-        XCTAssertEqual(sut.error, .noData)
+        XCTAssertNotNil(movieListViewModel.error)
+        XCTAssertEqual(movieListViewModel.error, .noData)
     }
     
     func test_loadMovies_failure_setsIsShowingError() async {
         // Given
-        mockRepository.moviesResult = .failure(.invalidURL)
+        mockMovieRepository.moviesResult = .failure(.invalidURL)
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertTrue(sut.isShowingError)
+        XCTAssertTrue(movieListViewModel.isShowingError)
     }
     
     func test_loadMovies_failure_keepsMoviesEmpty() async {
         // Given
-        mockRepository.moviesResult = .failure(.noData)
+        mockMovieRepository.moviesResult = .failure(.noData)
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertTrue(sut.movies.isEmpty)
+        XCTAssertTrue(movieListViewModel.movies.isEmpty)
     }
     
     func test_loadMovies_failure_setsLoadingToFalse() async {
         // Given
-        mockRepository.moviesResult = .failure(.noData)
+        mockMovieRepository.moviesResult = .failure(.noData)
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        XCTAssertFalse(sut.isLoading)
+        XCTAssertFalse(movieListViewModel.isLoading)
     }
     
     func test_loadMovies_networkError_setsCorrectError() async {
         // Given
-        mockRepository.moviesResult = .failure(.serverError(statusCode: 500))
+        mockMovieRepository.moviesResult = .failure(.serverError(statusCode: 500))
         
         // When
-        await sut.loadMovies()
+        await movieListViewModel.loadMovies()
         
         // Then
-        if case .serverError(let code) = sut.error {
+        if case .serverError(let code) = movieListViewModel.error {
             XCTAssertEqual(code, 500)
         } else {
             XCTFail("Expected server error")
@@ -183,50 +183,50 @@ final class MovieListViewModelTests: XCTestCase {
     
     func test_refresh_resetsCurrentPage() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
-        await sut.loadMovies() // Page becomes 2
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
+        await movieListViewModel.loadMovies() // Page becomes 2
         
         // When
-        await sut.refresh()
+        await movieListViewModel.refresh()
         
         // Then
-        XCTAssertEqual(mockRepository.lastRequestedPage, 1)
+        XCTAssertEqual(mockMovieRepository.lastRequestedPage, 1)
     }
     
     func test_refresh_clearsExistingMovies() async {
         // Given
-        sut.movies = Movie.mockArray(count: 5)
-        mockRepository.moviesResult = .success([])
+        movieListViewModel.movies = Movie.mockArray(count: 5)
+        mockMovieRepository.moviesResult = .success([])
         
         // When
-        await sut.refresh()
+        await movieListViewModel.refresh()
         
         // Then
-        XCTAssertTrue(sut.movies.isEmpty)
+        XCTAssertTrue(movieListViewModel.movies.isEmpty)
     }
     
     func test_refresh_loadsNewMovies() async {
         // Given
         let newMovies = Movie.mockArray(count: 3)
-        mockRepository.moviesResult = .success(newMovies)
+        mockMovieRepository.moviesResult = .success(newMovies)
         
         // When
-        await sut.refresh()
+        await movieListViewModel.refresh()
         
         // Then
-        XCTAssertEqual(sut.movies.count, 3)
+        XCTAssertEqual(movieListViewModel.movies.count, 3)
     }
     
     func test_refresh_clearsError() async {
         // Given
-        sut.error = .noData
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        movieListViewModel.error = .noData
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When
-        await sut.refresh()
+        await movieListViewModel.refresh()
         
         // Then
-        XCTAssertNil(sut.error)
+        XCTAssertNil(movieListViewModel.error)
     }
     
     // MARK: - Load More Tests
@@ -234,41 +234,41 @@ final class MovieListViewModelTests: XCTestCase {
     func test_loadMoreIfNeeded_withLastMovie_loadsMore() async {
         // Given
         let movies = Movie.mockArray(count: 3)
-        sut.movies = movies
-        mockRepository.moviesResult = .success(Movie.mockArray(count: 2))
+        movieListViewModel.movies = movies
+        mockMovieRepository.moviesResult = .success(Movie.mockArray(count: 2))
         
         // When
-        await sut.loadMoreIfNeeded(currentMovie: movies.last!)
+        await movieListViewModel.loadMoreIfNeeded(currentMovie: movies.last!)
         
         // Then
-        XCTAssertEqual(sut.movies.count, 5)
+        XCTAssertEqual(movieListViewModel.movies.count, 5)
     }
     
     func test_loadMoreIfNeeded_withMiddleMovie_doesNotLoad() async {
         // Given
         let movies = Movie.mockArray(count: 3)
-        sut.movies = movies
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        movieListViewModel.movies = movies
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When
-        await sut.loadMoreIfNeeded(currentMovie: movies[1])
+        await movieListViewModel.loadMoreIfNeeded(currentMovie: movies[1])
         
         // Then
-        XCTAssertEqual(sut.movies.count, 3)
-        XCTAssertEqual(mockRepository.fetchMoviesCallCount, 0)
+        XCTAssertEqual(movieListViewModel.movies.count, 3)
+        XCTAssertEqual(mockMovieRepository.fetchMoviesCallCount, 0)
     }
     
     func test_loadMoreIfNeeded_whileLoading_doesNotLoadAgain() async {
         // Given
         let movies = Movie.mockArray(count: 3)
-        sut.movies = movies
-        sut.isLoading = true
+        movieListViewModel.movies = movies
+        movieListViewModel.isLoading = true
         
         // When
-        await sut.loadMoreIfNeeded(currentMovie: movies.last!)
+        await movieListViewModel.loadMoreIfNeeded(currentMovie: movies.last!)
         
         // Then
-        XCTAssertEqual(mockRepository.fetchMoviesCallCount, 0)
+        XCTAssertEqual(mockMovieRepository.fetchMoviesCallCount, 0)
     }
     
     func test_loadMoreIfNeeded_withEmptyMovies_doesNotLoad() async {
@@ -276,46 +276,46 @@ final class MovieListViewModelTests: XCTestCase {
         let movie = Movie.mock()
         
         // When
-        await sut.loadMoreIfNeeded(currentMovie: movie)
+        await movieListViewModel.loadMoreIfNeeded(currentMovie: movie)
         
         // Then
-        XCTAssertEqual(mockRepository.fetchMoviesCallCount, 0)
+        XCTAssertEqual(mockMovieRepository.fetchMoviesCallCount, 0)
     }
     
     // MARK: - Loading State Tests
     
     func test_loadMovies_setsLoadingToTrue_duringExecution() async {
         // Given
-        mockRepository.moviesResult = .success(Movie.mockArray())
+        mockMovieRepository.moviesResult = .success(Movie.mockArray())
         
         // When/Then
         let loadTask = Task {
-            await sut.loadMovies()
+            await movieListViewModel.loadMovies()
         }
         
         // Check loading state immediately
         try? await Task.sleep(nanoseconds: 10_000_000) // 0.01 seconds
-        XCTAssertTrue(sut.isLoading)
+        XCTAssertTrue(movieListViewModel.isLoading)
         
         await loadTask.value
-        XCTAssertFalse(sut.isLoading)
+        XCTAssertFalse(movieListViewModel.isLoading)
     }
     
     // MARK: - Error Message Tests
     
     func test_error_invalidURL_hasCorrectMessage() {
         // Given
-        sut.error = .invalidURL
+        movieListViewModel.error = .invalidURL
         
         // Then
-        XCTAssertEqual(sut.error?.localizedDescription, "Invalid URL")
+        XCTAssertEqual(movieListViewModel.error?.localizedDescription, "Invalid URL")
     }
     
     func test_error_noData_hasCorrectMessage() {
         // Given
-        sut.error = .noData
+        movieListViewModel.error = .noData
         
         // Then
-        XCTAssertEqual(sut.error?.localizedDescription, "No data received")
+        XCTAssertEqual(movieListViewModel.error?.localizedDescription, "No data received")
     }
 }
