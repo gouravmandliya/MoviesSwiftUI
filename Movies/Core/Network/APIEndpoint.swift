@@ -12,7 +12,11 @@ enum APIEndpoint {
     case movieDetail(id: Int)
     
     private var baseURL: String {
-        "https://api.themoviedb.org/3"
+        TMDBConfig.API.baseURL
+    }
+    
+    private var apiKey: String {
+        TMDBConfig.API.apiKey
     }
     
     var url: URL? {
@@ -31,7 +35,7 @@ enum APIEndpoint {
     }
     
     private var queryItems: [URLQueryItem] {
-        var items = [URLQueryItem(name: "api_key", value: Config.apiKey)]
+        var items = [URLQueryItem(name: "api_key", value: apiKey)]
         switch self {
         case .popularMovies(let page):
             items.append(URLQueryItem(name: "page", value: "\(page)"))

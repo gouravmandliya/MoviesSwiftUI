@@ -25,13 +25,11 @@ struct Movie: Codable, Identifiable, Hashable {
     let voteCount: Int
     
     var posterURL: URL? {
-        guard let path = posterPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/w500\(path)")
+        TMDBConfig.Image.url(path: posterPath, size: TMDBConfig.Image.posterSize)
     }
     
     var backdropURL: URL? {
-        guard let path = backdropPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/original\(path)")
+        TMDBConfig.Image.url(path: backdropPath, size: TMDBConfig.Image.backdropSize)
     }
     
     var formattedRating: String {
@@ -74,7 +72,6 @@ struct MovieDetail: Codable, Identifiable {
     }
     
     var backdropURL: URL? {
-        guard let path = backdropPath else { return nil }
-        return URL(string: "https://image.tmdb.org/t/p/original\(path)")
+        TMDBConfig.Image.url(path: backdropPath, size: TMDBConfig.Image.backdropSize)
     }
 }
