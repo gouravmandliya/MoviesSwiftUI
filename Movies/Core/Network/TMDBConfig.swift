@@ -10,7 +10,7 @@ import Foundation
 enum TMDBConfig {
 
     // MARK: - API
-    /// API configuration values used to build network requests.
+    // API configuration values used to build network requests.
     enum API {
         /// Base URL for the TMDB v3 API.
         static let baseURL = "https://api.themoviedb.org/3"
@@ -19,7 +19,7 @@ enum TMDBConfig {
     }
 
     // MARK: - Image
-    /// Image configuration and helpers for constructing TMDB image URLs.
+    // Image configuration and helpers for constructing TMDB image URLs.
     enum Image {
         static let baseURL = "https://image.tmdb.org/t/p/"
         static let posterSize = "w500"

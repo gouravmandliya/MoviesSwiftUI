@@ -8,9 +8,6 @@
 import SwiftUI
 import SDWebImageSwiftUI
 
-/// A reusable image loader built on SDWebImageSwiftUI's `WebImage`.
-/// Use this anywhere you previously used `AsyncImage` to get consistent
-/// caching, activity indicator, fade transition, and placeholders.
 struct SDRemoteImageView<Placeholder: View>: View {
     let url: URL?
     let contentMode: ContentMode
@@ -18,12 +15,6 @@ struct SDRemoteImageView<Placeholder: View>: View {
     @ViewBuilder var placeholder: Placeholder
     private let customContent: ((Image) -> AnyView)?
 
-    /// Designated initializer.
-    /// - Parameters:
-    ///   - url: The remote image URL.
-    ///   - contentMode: How the image should scale inside its bounds.
-    ///   - options: SDWebImage options. Defaults enable retry, background continue and scale down.
-    ///   - placeholder: Placeholder view shown while loading.
     init(
         url: URL?,
         contentMode: ContentMode = .fit,
@@ -79,4 +70,3 @@ extension SDRemoteImageView where Placeholder == Color {
         }
     }
 }
-
