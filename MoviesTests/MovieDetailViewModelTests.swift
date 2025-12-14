@@ -235,4 +235,112 @@ final class MovieDetailViewModelTests: XCTestCase {
         XCTAssertNotNil(movieDetailViewModel.movieDetail)
         XCTAssertNil(movieDetailViewModel.error)
     }
+    
+    // MARK: - Error Mapping & Edge Cases
+    func test_loadMovieDetail_failure_invalidURL_setsInvalidURLError() async {
+        // Given
+        mockMovieRepository.detailResult = .failure(.invalidURL)
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(movieDetailViewModel.error, .invalidURL)
+        XCTAssertTrue(movieDetailViewModel.isShowingError)
+        XCTAssertNil(movieDetailViewModel.movieDetail)
+    }
+
+    func test_loadMovieDetail_failure_serverErrorRange_variousCodes() async {
+        // Given
+        let codes = [400, 401, 403, 404, 500, 503]
+        for code in codes {
+            mockMovieRepository.detailResult = .failure(.serverError(statusCode: code))
+
+            // When
+            await movieDetailViewModel.loadMovieDetail()
+
+            // Then
+            if case .serverError(let status) = movieDetailViewModel.error {
+                XCTAssertEqual(status, code)
+            } else {
+                XCTFail("Expected serverError for code: \(code)")
+            }
+            XCTAssertTrue(movieDetailViewModel.isShowingError)
+            XCTAssertNil(movieDetailViewModel.movieDetail)
+        }
+    }
+
+    // MARK: - Additional Success State Tests
+    func test_loadMovieDetail_success_setsIsShowingErrorFalse() async {
+        // Given
+        mockMovieRepository.detailResult = .success(MovieDetail.mock())
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertFalse(movieDetailViewModel.isShowingError)
+        XCTAssertNil(movieDetailViewModel.error)
+    }
+
+    func test_loadMovieDetail_multipleSequentialCalls_callsRepositoryTwice() async {
+        // Given
+        mockMovieRepository.detailResult = .success(MovieDetail.mock())
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+        mockMovieRepository.detailResult = .success(MovieDetail.mock(id: 999))
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(mockMovieRepository.fetchDetailCallCount, 2)
+        XCTAssertEqual(mockMovieRepository.lastRequestedMovieId, testMovieId)
+    }
+
+    // MARK: - Formatting Edge Cases
+    func test_loadMovieDetail_formattedRating_handlesMixedRating() async {
+        // Given
+        mockMovieRepository.detailResult = .success(MovieDetail.mock(voteAverage: 8.5))
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(movieDetailViewModel.movieDetail?.formattedRating, "8.5")
+    }
+    
+    func test_loadMovieDetail_runtimeFormatting_handlesMixedMinutes() async {
+        // Given
+        mockMovieRepository.detailResult = .success(MovieDetail.mock(runtime: 125))
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(movieDetailViewModel.movieDetail?.formattedRuntime, "2h 5m")
+    }
+    
+    func test_loadMovieDetail_runtimeFormatting_handlesMixedMinutesNil() async {
+        // Given
+        mockMovieRepository.detailResult = .success(MovieDetail.mock(runtime: nil))
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(movieDetailViewModel.movieDetail?.formattedRuntime, nil)
+    }
+    
+    func test_loadMovieDetail_runtimeFormatting_handlebackdropUrl() async {
+        // Given
+        let mock = MovieDetail.mock()
+        let backdropURL = TMDBConfig.Image.url(path: mock.backdropPath, size: TMDBConfig.Image.backdropSize)
+        mockMovieRepository.detailResult = .success(mock)
+
+        // When
+        await movieDetailViewModel.loadMovieDetail()
+
+        // Then
+        XCTAssertEqual(movieDetailViewModel.movieDetail?.backdropURL, backdropURL)
+    }
 }

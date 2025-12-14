@@ -65,7 +65,7 @@ extension Movie {
 }
 
 extension MovieDetail {
-    static func mock(id: Int = 1) -> MovieDetail {
+    static func mock(id: Int = 1, runtime: Int? = 120, voteAverage: Double = 8.5) -> MovieDetail {
         MovieDetail(
             id: id,
             title: "Test Movie Detail",
@@ -73,9 +73,9 @@ extension MovieDetail {
             posterPath: "/poster.jpg",
             backdropPath: "/backdrop.jpg",
             releaseDate: "2024-01-01",
-            voteAverage: 8.5,
+            voteAverage: voteAverage,
             voteCount: 2000,
-            runtime: 120,
+            runtime: runtime,
             genres: [
                 Genre(id: 1, name: "Action"),
                 Genre(id: 2, name: "Adventure")

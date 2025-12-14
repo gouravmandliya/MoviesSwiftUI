@@ -14,6 +14,7 @@ struct MovieDetailView: View {
         Group {
             if viewModel.isLoading {
                 LoadingView()
+                    .accessibilityIdentifier("movieDetail.loading")
             } else if let detail = viewModel.movieDetail {
                 detailContent(detail)
             } else {
@@ -21,6 +22,7 @@ struct MovieDetailView: View {
                     message: "Failed to load movie details",
                     retryAction: { Task { await viewModel.loadMovieDetail() } }
                 )
+                .accessibilityIdentifier("movieDetail.error")
             }
         }
         .task {
@@ -62,6 +64,7 @@ struct MovieDetailView: View {
                     Text(detail.title)
                         .font(.largeTitle)
                         .bold()
+                        .accessibilityIdentifier("movieDetail.titleText")
                     
                     if let tagline = detail.tagline {
                         Text(tagline)
@@ -77,10 +80,12 @@ struct MovieDetailView: View {
                         
                         if let runtime = detail.formattedRuntime {
                             Label(runtime, systemImage: "clock")
+                                .accessibilityIdentifier("movieDetail.runtimeText")
                         }
                         
                         Label(detail.formattedRating, systemImage: "star.fill")
                             .foregroundColor(.yellow)
+                            .accessibilityIdentifier("movieDetail.ratingText")
                     }
                     .font(.subheadline)
                     
@@ -103,15 +108,18 @@ struct MovieDetailView: View {
                         .font(.title2)
                         .bold()
                         .padding(.top)
+                        .accessibilityIdentifier("movieDetail.overviewHeader")
                     
                     Text(detail.overview)
                         .font(.body)
+                        .accessibilityIdentifier("movieDetail.overviewText")
                 }
                 .padding(.top, 8)
                 .padding()
             }
             .padding(.bottom, 16)
         }
+        .accessibilityIdentifier("movieDetail.scroll")
         .navigationBarTitleDisplayMode(.inline)
     }
 }

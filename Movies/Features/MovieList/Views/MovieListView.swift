@@ -15,11 +15,13 @@ struct MovieListView: View {
             Group {
                 if viewModel.isLoading && viewModel.movies.isEmpty {
                     LoadingView()
+                    .accessibilityIdentifier("movieList.loading")
                 } else if viewModel.movies.isEmpty {
                     ErrorView(
                         message: "No movies available",
                         retryAction: { Task { await viewModel.refresh() } }
                     )
+                    .accessibilityIdentifier("movieList.error")
                 } else {
                     movieList
                 }
@@ -52,6 +54,7 @@ struct MovieListView: View {
                         MovieRowView(movie: movie)
                     }
                     .buttonStyle(.plain)
+                    .accessibilityIdentifier("movieList.row.\(movie.id)")
                     .task {
                         await viewModel.loadMoreIfNeeded(currentMovie: movie)
                     }
@@ -59,11 +62,13 @@ struct MovieListView: View {
                 
                 if viewModel.isLoading {
                     ProgressView()
+                    .accessibilityIdentifier("movieList.loadingMore")
                         .padding()
                 }
             }
             .padding()
         }
+        .accessibilityIdentifier("movieList.scroll")
         .navigationDestination(for: Movie.self) { movie in
             MovieDetailView(
                 viewModel: viewModel.makeDetailViewModel(movieId: movie.id)
