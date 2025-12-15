@@ -47,16 +47,3 @@ struct SDRemoteImageView<Placeholder: View>: View {
         .transition(.fade(duration: 0.25))
     }
 }
-
-// Convenience initializer with a default placeholder
-extension SDRemoteImageView where Placeholder == Color {
-    init(
-        url: URL?,
-        contentMode: ContentMode = .fit,
-        options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages]
-    ) {
-        self.init(url: url, contentMode: contentMode, options: options) {
-            Color.gray.opacity(0.3)
-        }
-    }
-}
