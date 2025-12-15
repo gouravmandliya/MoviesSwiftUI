@@ -14,7 +14,7 @@ enum TMDBConfig {
         // Base URL for the TMDB v3 API.
         static let baseURL = "https://api.themoviedb.org/3"
         // API key for authenticating requests.
-        static let apiKey = "019cdd171a3212b0a80c3de340f2587a"
+        static let apiKey = "Your api key"
     }
 
     // Image configuration and helpers for constructing TMDB image URLs.
