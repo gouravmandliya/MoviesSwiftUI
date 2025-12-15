@@ -69,15 +69,15 @@ Views → ViewModels → Repository → Network/Persistence
 ```
 MovieBrowser/
 ├── App/                    # Entry point & DI container
+├── Common/                # Shared enums & views
 ├── Core/
 │   ├── Network/           # API client & endpoints
 │   ├── Persistence/       # Core Data manager
-│   └── Config/            # Configuration
+│   └── TMDBConfig/            # Configuration
 ├── Features/
 │   ├── MovieList/         # List feature
 │   └── MovieDetail/       # Detail feature
 ├── Repositories/          # Data abstraction
-├── Common/                # Shared enums & views
 └── Tests/                 # Unit tests (40+ cases)
 ```
 
