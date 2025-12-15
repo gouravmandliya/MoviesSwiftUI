@@ -91,7 +91,7 @@ MovieBrowser/
 
 1. Clone the repository
 ```bash
-git clone https://github.com/yourusername/Movies-ios.git](https://github.com/gouravmandliya/MoviesSwiftUI.git
+git clone https://github.com/gouravmandliya/MoviesSwiftUI.git
 ```
 
 2. Add your TMDB API key in `TMDBConfig.swift`
