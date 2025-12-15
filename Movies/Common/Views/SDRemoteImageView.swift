@@ -15,12 +15,7 @@ struct SDRemoteImageView<Placeholder: View>: View {
     @ViewBuilder var placeholder: Placeholder
     private let customContent: ((Image) -> AnyView)?
 
-    init(
-        url: URL?,
-        contentMode: ContentMode = .fit,
-        options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages],
-        @ViewBuilder placeholder: () -> Placeholder
-    ) {
+    init(url: URL?, contentMode: ContentMode = .fit, options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages], @ViewBuilder placeholder: () -> Placeholder) {
         self.url = url
         self.contentMode = contentMode
         self.options = options
@@ -28,12 +23,7 @@ struct SDRemoteImageView<Placeholder: View>: View {
         self.customContent = nil
     }
 
-    init<I: View>(
-        url: URL?,
-        options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages],
-        @ViewBuilder content: @escaping (Image) -> I,
-        @ViewBuilder placeholder: () -> Placeholder
-    ) {
+    init<I: View>(url: URL?, options: SDWebImageOptions = [.retryFailed, .continueInBackground, .scaleDownLargeImages], @ViewBuilder content: @escaping (Image) -> I, @ViewBuilder placeholder: () -> Placeholder) {
         self.url = url
         self.contentMode = .fit
         self.options = options

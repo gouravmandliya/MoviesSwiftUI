@@ -7,13 +7,6 @@
 
 import Foundation
 
-struct MovieResponse: Codable {
-    let page: Int
-    let results: [Movie]
-    let totalPages: Int
-    let totalResults: Int
-}
-
 struct Movie: Codable, Identifiable, Hashable {
     let id: Int
     let title: String

@@ -9,16 +9,14 @@ import Foundation
 
 enum TMDBConfig {
 
-    // MARK: - API
     // API configuration values used to build network requests.
     enum API {
-        /// Base URL for the TMDB v3 API.
+        // Base URL for the TMDB v3 API.
         static let baseURL = "https://api.themoviedb.org/3"
-        /// API key for authenticating requests.
+        // API key for authenticating requests.
         static let apiKey = "019cdd171a3212b0a80c3de340f2587a"
     }
 
-    // MARK: - Image
     // Image configuration and helpers for constructing TMDB image URLs.
     enum Image {
         static let baseURL = "https://image.tmdb.org/t/p/"

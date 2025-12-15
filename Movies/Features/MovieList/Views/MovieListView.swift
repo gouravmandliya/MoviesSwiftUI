@@ -63,7 +63,7 @@ struct MovieListView: View {
                 if viewModel.isLoading {
                     ProgressView()
                     .accessibilityIdentifier("movieList.loadingMore")
-                        .padding()
+                    .padding()
                 }
             }
             .padding()

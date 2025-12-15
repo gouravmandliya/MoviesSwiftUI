@@ -15,10 +15,7 @@ final class AppContainer {
     init() {
         self.networkManager = NetworkManager()
         self.persistenceManager = PersistenceManager()
-        self.movieRepository = MovieRepository(
-            networkManager: networkManager,
-            persistenceManager: persistenceManager
-        )
+        self.movieRepository = MovieRepository(networkManager: networkManager, persistenceManager: persistenceManager)
     }
     
     func makeMovieListViewModel() -> MovieListViewModel {

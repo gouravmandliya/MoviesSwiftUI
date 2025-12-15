@@ -20,7 +20,7 @@ final class MoviesUITests: XCTestCase {
     }
 
     @MainActor
-    func testMoviesAppUI() throws {
+    func test_MoviesAppUI() throws {
         let app = XCUIApplication()
         app.launch()
 
@@ -44,7 +44,7 @@ final class MoviesUITests: XCTestCase {
             return
         }
 
-        // Now on detail view, wait for either loading or content
+        // Now on detail view, wait for content
         let detailScroll = app.scrollViews["movieDetail.scroll"]
 
         // Wait for detail content to appear
